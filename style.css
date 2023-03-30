@@ -66,7 +66,7 @@ body {
   align-items: center;
   padding-left: 5.9rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.1s ease;
 }
 
 .list-item:nth-child(odd) {
@@ -102,6 +102,36 @@ body {
 }
 .list p {
   text-align: center;
+}
+.hide {
+  display: none;
+}
+
+/* /////////////////////// */
+/* MOBILE */
+/* ///////////////////////// */
+
+@media (max-width: 31em) {
+  body {
+    width: 90%;
+    margin: 0 5%;
+  }
+  .img {
+    margin-bottom: 1rem;
+  }
+  .title {
+    font-size: 3.2rem;
+    margin-bottom: 1rem;
+  }
+  .task-form {
+    grid-template-columns: 1fr;
+    row-gap: 1rem;
+  }
+
+  .button-add {
+    padding: 1.5rem;
+    font-size: 1.8rem;
+  }
 }
 /* 
 ul {

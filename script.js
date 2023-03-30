@@ -2,7 +2,7 @@ const inputText = document.querySelector(".input");
 const btnAdd = document.querySelector(".button-add");
 const taskList = document.querySelector(".list");
 
-const tasksArray = [];
+let tasksArray;
 let count = 0;
 
 const clearInput = () => {
@@ -32,7 +32,7 @@ const addCheckIcon = (parentElement) => {
   );
 };
 
-const renderList = (parentElement, task, id, isChecked, listItem) => {
+const renderList = (parentElement, task, id) => {
   const html = `
     <li class="list-item " id="${id}" data-no="${id}" data-job="checked">
 
@@ -67,13 +67,20 @@ const renderList = (parentElement, task, id, isChecked, listItem) => {
 
 window.addEventListener("load", function () {
   count = localStorage.getItem("count");
-  const tasksArray = JSON.parse(localStorage.getItem("tasks"));
+  tasksArray = JSON.parse(localStorage.getItem("tasks"));
+
   tasksArray.forEach((item) => {
-    const listItem = document.getElementById(item.id);
-    renderList(taskList, item.task, item.id, item.isChecked, listItem);
+    renderList(taskList, item.task, item.id);
+    const listItem = document.getElementById(`${item.id}`);
+
+    if (item.isChecked) {
+      listItem.classList.add("checked");
+      addCheckIcon(listItem);
+    }
   });
 });
 
+// Adding a task
 btnAdd.addEventListener("click", function (e) {
   e.preventDefault();
   const task = inputText.value;
@@ -86,9 +93,9 @@ btnAdd.addEventListener("click", function (e) {
   clearInput();
 });
 
+// Checking or deleting a task
 taskList.addEventListener("click", function (e) {
   const target = e.target;
-
   if (target.dataset.job === "close") {
     document.getElementById(`${target.dataset.no}`).remove();
     tasksArray.forEach((item, i) => {
@@ -98,13 +105,19 @@ taskList.addEventListener("click", function (e) {
     });
     localStorage.setItem("tasks", JSON.stringify(tasksArray));
   }
+
   if (target.dataset.job === "checked") {
     const listItem = document.getElementById(`${target.dataset.no}`);
     const checkIcon = document.getElementById(
-      `icon-check-${listItem.dataset.no}`
+      `icon-check-${target.dataset.no}`
     );
-
     listItem.classList.toggle("checked");
+    if (!checkIcon) {
+      addCheckIcon(listItem);
+    }
+    if (checkIcon) {
+      checkIcon.remove();
+    }
     tasksArray.forEach((item) => {
       if (item.id == target.dataset.no) {
         listItem.classList.contains("checked")
@@ -112,14 +125,8 @@ taskList.addEventListener("click", function (e) {
           : (item.isChecked = false);
       }
     });
-    localStorage.setItem("tasks", JSON.stringify(tasksArray));
 
-    if (!checkIcon) {
-      addCheckIcon(listItem);
-    }
-    if (checkIcon) {
-      checkIcon.remove();
-    }
+    localStorage.setItem("tasks", JSON.stringify(tasksArray));
   }
 });
 // localStorage.clear();
