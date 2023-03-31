@@ -67,7 +67,12 @@ const renderList = (parentElement, task, id) => {
 
 window.addEventListener("load", function () {
   count = localStorage.getItem("count");
-  tasksArray = JSON.parse(localStorage.getItem("tasks"));
+
+  if (!JSON.parse(localStorage.getItem("tasks"))) {
+    tasksArray = [];
+  }
+  if (JSON.parse(localStorage.getItem("tasks")))
+    tasksArray = JSON.parse(localStorage.getItem("tasks"));
 
   tasksArray.forEach((item) => {
     renderList(taskList, item.task, item.id);
