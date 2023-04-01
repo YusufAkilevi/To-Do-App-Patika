@@ -31,7 +31,12 @@ const addCheckIcon = (parentElement) => {
       </svg>`
   );
 };
-
+const renderEmptyText = () => {
+  taskList.insertAdjacentHTML(
+    "afterbegin",
+    `<p class="empty-text">Your list is empty!! Add something.</p>`
+  );
+};
 const renderList = (parentElement, task, id) => {
   const html = `
     <li class="list-item " id="${id}" data-no="${id}" data-job="checked">
@@ -88,6 +93,7 @@ window.addEventListener("load", function () {
 
   if (!JSON.parse(localStorage.getItem("tasks"))) {
     tasksArray = [];
+    renderEmptyText();
   }
   if (JSON.parse(localStorage.getItem("tasks")))
     tasksArray = JSON.parse(localStorage.getItem("tasks"));
@@ -107,7 +113,7 @@ window.addEventListener("load", function () {
 btnAdd.addEventListener("click", function (e) {
   e.preventDefault();
   const task = inputText.value.trim();
-  console.log(task);
+
   if (task === "") {
     alert("Listeye boş ekleme yapamazsınız!");
     clearInput();
@@ -131,9 +137,11 @@ taskList.addEventListener("click", function (e) {
         tasksArray.splice(i, 1);
       }
     });
+
+    if (tasksArray.length === 0) renderEmptyText();
+
     localStorage.setItem("tasks", JSON.stringify(tasksArray));
   }
-
   if (target.dataset.job === "checked") {
     const listItem = document.getElementById(`${target.dataset.no}`);
     const checkIcon = document.getElementById(
