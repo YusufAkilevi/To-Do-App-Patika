@@ -91,7 +91,10 @@ const renderList = (parentElement, task, id) => {
 window.addEventListener("load", function () {
   count = localStorage.getItem("count");
 
-  if (!JSON.parse(localStorage.getItem("tasks"))) {
+  if (
+    !JSON.parse(localStorage.getItem("tasks")) ||
+    JSON.parse(localStorage.getItem("tasks")).length === 0
+  ) {
     tasksArray = [];
     renderEmptyText();
   }
